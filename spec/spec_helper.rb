@@ -1,15 +1,18 @@
 require 'rubygems'
+require 'bundler'
 
-require 'combustion'
+Bundler.require :default, :development
+
 require 'blacklight/engine'
 require 'blacklight/hierarchy/engine'
 require 'rsolr'
 require 'rsolr-ext'
 require 'rsolr-ext/response'
 require 'capybara/rspec'
-Combustion.initialize!
+Combustion.initialize! :active_record, :action_controller,
+                       :action_view, :sprockets, :action_mailer
 
-
+require 'rspec-rails'
 # Setup blacklight environment
 Blacklight.solr_config = { :url => 'http://127.0.0.1:8983/solr' }
 

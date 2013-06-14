@@ -20,16 +20,17 @@ describe "catalog" do
   end
   it "should display the hierarchy" do
     visit '/'
-
-    page.should have_selector('li.h-node', :content => 'a')
-    page.should have_selector('li.h-node > ul > li.h-node', :content => 'b')
-    page.should have_selector('li.h-node li.h-leaf', :content => 'c (30)')
-    page.should have_selector('li.h-node li.h-leaf', :content => 'd (25)')
-    page.should have_selector('li.h-node > ul > li.h-node', :content => 'c')
-    page.should have_selector('li.h-node li.h-leaf', :content => 'd (5)')
-    page.should have_selector('.facet-hierarchy > li.h-leaf', :content => 'n (1)')
-    page.should have_selector('li.h-node li.h-leaf', :content => 'q (25)')
-    page.should have_selector('li.h-node li.h-leaf', :content => 'x (5)')
+    puts page.html.inspect
+    page.should have_selector('li.h-node', :text => 'a')
+    page.should have_selector('li.h-node > ul > li.h-node', :text => 'b')
+    page.should have_selector('li.h-node li.h-leaf', :text => 'c 30')
+    page.should have_selector('li.h-node li.h-leaf', :text => 'd 25')
+    page.should have_selector('li.h-node > ul > li.h-node', :text => 'c')
+    page.should have_selector('li.h-node li.h-leaf', :text => 'd 5')
+    page.should have_selector('.facet-hierarchy > li.h-leaf', :text => 'n 1')
+    page.should have_selector('li.h-node li.h-leaf', :text => 'q 25')
+    page.should have_selector('li.h-node', :text => 'x')
+    page.should have_selector('li.h-node > ul > li.h-leaf', :text => 'y 5')
   end
 
   it "should properly link the hierarchy" do

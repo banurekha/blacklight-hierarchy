@@ -17,10 +17,15 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.0"
-  s.add_dependency "blacklight", "~> 3.2"
+  s.add_dependency "blacklight", "~> 4.0.0"
+  s.add_dependency "rsolr"
+  s.add_dependency "rsolr-ext"
+
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "capybara"
+  s.add_development_dependency "sqlite3"
   s.add_development_dependency "vcr"
-  s.add_development_dependency "combustion"
+  #s.add_development_dependency "combustion"
+  s.add_development_dependency 'fakeweb'
 end

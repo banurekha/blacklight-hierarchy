@@ -2,7 +2,7 @@
 http_interactions: 
 - request: 
     method: get
-    uri: http://127.0.0.1:8983/solr/select?wt=ruby&rows=10
+    uri: http://127.0.0.1:8983/solr/select?wt=ruby&qt=search&start=0&rows=10
     body: 
       encoding: US-ASCII
       string: ""
