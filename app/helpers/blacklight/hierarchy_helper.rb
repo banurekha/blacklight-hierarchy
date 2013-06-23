@@ -64,7 +64,7 @@ end
 # Putting bare HTML strings in a helper sucks. But in this case, with a 
 # lot of recursive tree-walking going on, it's an order of magnitude faster
 # than either render(:partial) or content_tag
-def render_facet_hierarchy_item(field_name, data, key)
+def render_facet_hierarchy_item(field_name, data, key, depth=0)
   item = data[:_]
   subset = data.reject { |k,v| ! k.is_a?(String) }
   
@@ -80,31 +80,37 @@ def render_facet_hierarchy_item(field_name, data, key)
   end
   
   unless subset.empty?
-    subul = subset.keys.sort.collect do |subkey| 
-      render_facet_hierarchy_item(field_name, subset[subkey], subkey) 
+    subul = subset.keys.sort.collect do |subkey|
+      render_facet_hierarchy_item(field_name, subset[subkey], subkey, depth+1)
     end.join('')
     ul = "<ul>#{subul}</ul>".html_safe
   end
   
-  %{<li class="#{li_class}">#{li.html_safe}#{ul.html_safe}</li>}.html_safe
+  %{<li data-term="#{item.value}" class="#{li_class} depth-#{depth+1}">#{li.html_safe}#{ul.html_safe}</li>}.html_safe
+ # %{<li class="#{li_class} depth-#{depth+1}">#{li.html_safe}#{ul.html_safe}</li>}.html_safe
+
 end
 
 def render_hierarchy(field)
-  prefix = field.field.split(/_/).first
+  prefix =field.field.split(/_/).first
+  puts "Hierarchy Field ************* #{field.inspect}, Prefix: #{prefix.inspect} *******"
   tree = facet_tree(prefix)[field.field]
+  puts "Hierarchy Field ************* #{tree.inspect} *******"
+
   tree.keys.sort.collect do |key|
     render_facet_hierarchy_item(field.field, tree[key], key)
   end.join("\n").html_safe
 end
 
-def render_qfacet_value(facet_solr_field, item, options ={})    
-  (link_to_unless(options[:suppress_link], item.value, add_facet_params(facet_solr_field, item.qvalue), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+def render_qfacet_value(facet_solr_field, item, options ={})
+  #"#{item.value} #{render_facet_count(item.hits)} "
+  (link_to_unless(options[:suppress_link], item.value, add_facet_params_and_redirect(facet_solr_field, item.qvalue), :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
 end
 
 # Standard display of a SELECTED facet value, no link, special span
 # with class, and 'remove' button.
 def render_selected_qfacet_value(facet_solr_field, item)
-  content_tag(:span, render_qfacet_value(facet_solr_field, item, :suppress_link => true), :class => "selected label") +
+  content_tag(:span, render_qfacet_value(facet_solr_field, item, :suppress_link => true), :class => "selected") +
     link_to("[remove]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
   end
 
@@ -129,6 +135,7 @@ def facet_tree(prefix)
       }
     }
   end
+  puts "Tree: #{@facet_tree.inspect}, tree prefix:#{@facet_tree[prefix]}"
   @facet_tree[prefix]
 end
 
