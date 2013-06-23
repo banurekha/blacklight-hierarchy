@@ -9,7 +9,7 @@ describe "catalog" do
       config.default_solr_params = {
         :per_page => 10
       }
-      config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.facet_display = {
       :hierarchy => {
         'tag' => [nil]
