@@ -92,8 +92,9 @@ def render_facet_hierarchy_item(field_name, data, key, depth=0)
 end
 
 def render_hierarchy(field)
+  puts "Hierarchy Field ************* #{field.inspect}*******"
   prefix =field.field.split(/_/).first
-  puts "Hierarchy Field ************* #{field.inspect}, Prefix: #{prefix.inspect} *******"
+  puts "Prefix: #{prefix.inspect} *******"
   tree = facet_tree(prefix)[field.field]
   puts "Hierarchy Field ************* #{tree.inspect} *******"
 
@@ -111,8 +112,10 @@ end
 # with class, and 'remove' button.
 def render_selected_qfacet_value(facet_solr_field, item)
   content_tag(:span, render_qfacet_value(facet_solr_field, item, :suppress_link => true), :class => "selected") +
-    link_to("[remove]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
-  end
+  link_to("[remove]", catalog_index_path(params.merge(remove_facet_params(facet_solr_field, item.qvalue, params))), :class => "remove")
+
+  #link_to("[remove]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
+end
 
 HierarchicalFacetItem = Struct.new :qvalue, :value, :hits
 def facet_tree(prefix)
