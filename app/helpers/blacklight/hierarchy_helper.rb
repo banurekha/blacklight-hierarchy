@@ -91,13 +91,9 @@ def render_facet_hierarchy_item(field_name, data, key, depth=0)
 
 end
 
-def render_hierarchy(field)
-  puts "Hierarchy Field ************* #{field.inspect}*******"
-  prefix =field.field.split(/_/).first
-  puts "Prefix: #{prefix.inspect} *******"
+def render_hierarchy(field, opt={})
+  prefix = opt.has_key?(:prefix) ? opt[:prefix] : field.field.split(/_/).first
   tree = facet_tree(prefix)[field.field]
-  puts "Hierarchy Field ************* #{tree.inspect} *******"
-
   tree.keys.sort.collect do |key|
     render_facet_hierarchy_item(field.field, tree[key], key)
   end.join("\n").html_safe
