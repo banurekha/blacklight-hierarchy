@@ -76,7 +76,7 @@ def render_facet_hierarchy_item(field_name, data, key, depth=0)
   elsif facet_in_params?(field_name, item.qvalue)
     li = render_selected_qfacet_value(field_name, item)
   else
-    li = render_qfacet_value(field_name, item)
+    li = render_qfacet_value_link_count(field_name, item)
   end
   
   unless subset.empty?
