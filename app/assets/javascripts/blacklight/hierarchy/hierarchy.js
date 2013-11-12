@@ -11,6 +11,7 @@ $(document).ready(function() {
   Blacklight.do_hierarchical_facet_expand_contract_behavior.selector = 'li.h-node';
 
   Blacklight.hierarchical_facet_expand_contract = function() {
+    console.log("I am here in hierarchy javacript")
     var li = $(this);
     
     $('ul', this).each(function() {
@@ -24,6 +25,7 @@ $(document).ready(function() {
 
     // attach the toggle behavior to the li tag
     li.click(function(e){
+      console.log("Toggle li")
       if (e.target == this) {
         // toggle the content
         $(this).toggleClass('twiddle-open');

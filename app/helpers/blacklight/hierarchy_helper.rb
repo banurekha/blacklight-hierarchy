@@ -104,14 +104,25 @@ def render_qfacet_value(facet_solr_field, item, options ={})
   (link_to_unless(options[:suppress_link], item.value, add_facet_params_and_redirect(facet_solr_field, item.qvalue), :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
 end
 
+def render_qfacet_value_link_count(facet_solr_field, item, options ={})
+  (item.value + " " + link_to_unless(options[:suppress_link], render_facet_count(item.hits), add_facet_params_and_redirect(facet_solr_field, item.qvalue), :class=>"facet_select")).html_safe
+end
+
 # Standard display of a SELECTED facet value, no link, special span
 # with class, and 'remove' button.
-def render_selected_qfacet_value(facet_solr_field, item)
-  content_tag(:span, render_qfacet_value(facet_solr_field, item, :suppress_link => true), :class => "selected") +
+def render_selected_qfacet_value(facet_solr_field, item, options ={})
+  content_tag(:span, render_qfacet_value_link_count(facet_solr_field, item, :suppress_link => true), :class => "selected") +
   link_to("[remove]", catalog_index_path(params.merge(remove_facet_params(facet_solr_field, item.qvalue, params))), :class => "remove")
-
-  #link_to("[remove]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
 end
+
+# Standard display of a SELECTED facet value, no link, special span
+# with class, and 'remove' button.
+#def render_selected_qfacet_value(facet_solr_field, item)
+#  content_tag(:span, render_qfacet_value(facet_solr_field, item, :suppress_link => true), :class => "selected") +
+#  link_to("[remove]", catalog_index_path(params.merge(remove_facet_params(facet_solr_field, item.qvalue, params))), :class => "remove")
+#
+#  #link_to("[remove]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
+#end
 
 HierarchicalFacetItem = Struct.new :qvalue, :value, :hits
 def facet_tree(prefix)
